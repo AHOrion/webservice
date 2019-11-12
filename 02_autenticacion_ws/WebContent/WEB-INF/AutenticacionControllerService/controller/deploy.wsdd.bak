@@ -1,0 +1,42 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from AutenticacionControllerService WSDL service -->
+
+  <service name="AutenticacionController" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://controller"/>
+      <parameter name="wsdlServiceElement" value="AutenticacionControllerService"/>
+      <parameter name="schemaQualified" value="http://javabeans,http://controller"/>
+      <parameter name="wsdlServicePort" value="AutenticacionController"/>
+      <parameter name="className" value="controller.AutenticacionControllerSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="AutenticacionController"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="autenticarCliente" qname="operNS:autenticarCliente" xmlns:operNS="http://controller" returnQName="retNS:autenticarClienteReturn" xmlns:retNS="http://controller" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:usuario" xmlns:pns="http://controller" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:password" xmlns:pns="http://controller" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="obtenerCliente" qname="operNS:obtenerCliente" xmlns:operNS="http://controller" returnQName="retNS:obtenerClienteReturn" xmlns:retNS="http://controller" returnType="rtns:Cliente" xmlns:rtns="http://javabeans" soapAction="" >
+        <parameter qname="pns:usuario" xmlns:pns="http://controller" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:password" xmlns:pns="http://controller" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="obtenerCliente autenticarCliente"/>
+
+      <typeMapping
+        xmlns:ns="http://javabeans"
+        qname="ns:Cliente"
+        type="java:javabeans.Cliente"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>
