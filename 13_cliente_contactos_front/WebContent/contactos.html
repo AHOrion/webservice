@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Show contacts here</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+var url="http://localhost:8080/07_crud_contactos_rest/contacto";
+function iniciar(){	
+	console.log("iniciarContactos");
+	console.log(url);
+	$.get(url,function(data,status){
+		procesarRespuesta(data);
+	});
+}
+function eliminar(id){
+	console.log("eliminar");
+	$.ajax({"url":url+"/"+id,"type":"DELETE"});
+	console.log(url);
+	iniciar();
+}
+function procesarRespuesta(data){
+	console.log("respuestaContactos");
+	console.log(data);
+	var tabla="<table class='table table-striped'><tr><th>Nombre</th><th>Email</th><th>Edad</th><th></th></tr>";
+	if(!$.isEmptyObject(data)){
+		for(var i=0;i<data.length;i++){
+			tabla+="<tr><td>"+data[i].nombre+"</td><td>"+data[i].email+"</td><td>"+data[i].edad+"</td>";
+			tabla+="<td><a href='#' onclick='eliminar("+data[i].idContacto+")'>Eliminar</td></tr>";
+		}
+		tabla+="</table>";
+		$("#tabla").html(tabla);
+	}
+}
+
+
+</script>
+ 
+</head>
+<body onload="iniciar();">
+
+	
+
+<div class="container">
+	<div  id="tabla">
+	
+	</div>
+    <div class="col-sm-10">
+		
+		<a type="button" href='menu.html' class="btn btn-default">Volver</a>
+	</div>
+</div>
+
+</body>
+</html>
